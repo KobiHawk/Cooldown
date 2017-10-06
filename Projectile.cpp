@@ -14,10 +14,10 @@ Projectile::~Projectile()
 
 void Projectile::move()
 {
-	//location.x += velocity.velocityX;
-	//location.y += velocity.velocityY;
-	location.x++;
-	location.y++;
+	location.x += velocity.velocityX;
+	location.y += velocity.velocityY;
+	//location.x++;
+	//location.y++;
 }
 
 SDL_Rect Projectile::getSDL_Rect()

@@ -140,8 +140,7 @@ Projectile Character::fire(Position target)
 	Projectile result;
 
 	//initialize new projectile
-	//Velocity newVelocity = { (target.x - x)/60.0f, (target.y - y)/60.0f }; // divides by 60 for frame rate, is currently broken
-	Velocity newVelocity = { 1, 1 };
+	Velocity newVelocity = { (target.x - x)/60.0f, (target.y - y)/60.0f }; // divides by 60 for frame rate, is currently broken
 	result.setSDL_Rect(this->getSDL_Rect());
 	result.setVelocity(newVelocity);
 
