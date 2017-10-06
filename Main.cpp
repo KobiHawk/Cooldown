@@ -5,6 +5,7 @@
 #include <math.h>
 #include "Character.h"
 #include "Mouse.h"
+#include "ProjectileManager.h"
 
 bool init();
 SDL_Texture* loadTexture(std::string path);
@@ -12,12 +13,15 @@ bool loadMedia();
 void close();
 
 Character player;
+ProjectileManager projectileManager;
 SDL_Window* window;
 SDL_Surface* screenSurface;
 SDL_Renderer* renderer;
-SDL_Texture* gTexture;
+SDL_Texture* playerTexture;
+SDL_Texture* projectileTexture;
 const int SCREEN_WIDTH = 1024;
 const int SCREEN_HEIGHT = 1024;
+const int FRAME_RATE = 60;
 int speed = 5;
 
 bool init()
@@ -94,8 +98,8 @@ SDL_Texture* loadTexture(std::string path)
 
 void close()
 {
-	SDL_DestroyTexture(gTexture);
-	gTexture = NULL;
+	SDL_DestroyTexture(playerTexture);
+	playerTexture = NULL;
 
 	SDL_DestroyRenderer(renderer);
 	renderer = NULL;
@@ -111,8 +115,13 @@ bool loadMedia()
 {
 	bool result = true;
 
-	gTexture = loadTexture("Assets/Images/RedCircle.png");
-	if (gTexture == NULL)
+	playerTexture = loadTexture("Assets/Images/RedCircle.png");
+	if (playerTexture == NULL)
+	{
+		result = false;
+	}
+	projectileTexture = loadTexture("Assets/Images/Bullet.png");
+	if (projectileTexture == NULL)
 	{
 		result = false;
 	}
@@ -144,6 +153,7 @@ int main(int argc, char* argv[])
 			SDL_Event e;
 			Mouse mouse;
 			Position mousePosition;
+			//ProjectileManager projectileManager;
 
 			while (!quit) // main game loop
 			{
@@ -169,7 +179,7 @@ int main(int argc, char* argv[])
 					else if (e.type == SDL_MOUSEBUTTONDOWN)
 					{
 						mousePosition = mouse.handleClickEvent();
-						player.fire(mousePosition);
+						projectileManager.add(player.fire(mousePosition));
 					}
 					
 				}
@@ -198,11 +208,20 @@ int main(int argc, char* argv[])
 					moveX++;
 				}
 				player.move(moveX, moveY);
+				//end player movement
 				
 				//end movement
 
 				SDL_RenderClear(renderer);
-				SDL_RenderCopy(renderer, gTexture, NULL, &player.getPosition());
+				SDL_RenderCopy(renderer, playerTexture, NULL, &player.getSDL_Rect());
+
+				//manage projectiles
+				for (int i = 0; i < projectileManager.getCurrProjectiles(); i++)
+				{
+					//move all projectiles, then render them
+					projectileManager.returnProjectileAt(i).move();
+					SDL_RenderCopy(renderer, projectileTexture, NULL, &projectileManager.returnProjectileAt(i).getSDL_Rect());
+				}
 				SDL_RenderPresent(renderer); // blit
 
 			} // end of game loop, should be nothing after

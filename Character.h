@@ -1,20 +1,21 @@
 #pragma once
 #include <SDL.h>
 #include "Structs.h"
+#include "Projectile.h"
 
 class Character
 {
 public:
 	Character();
 	~Character();
-	SDL_Rect getPosition();
+	SDL_Rect getSDL_Rect();
 	Velocity getVelocity();
 	void setPosition(int x, int y, int w, int h);
 	void setVelocity(float velocityX, float velocityY);
 
 	void move(int x, int y);
 	void roll();
-	void fire(Position target);
+	Projectile fire(Position target);
 
 private:
 

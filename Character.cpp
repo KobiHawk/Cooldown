@@ -16,7 +16,7 @@ Character::~Character()
 {
 }
 
-SDL_Rect Character::getPosition()
+SDL_Rect Character::getSDL_Rect()
 {
 	SDL_Rect result = { x, y, w, h };
 	return result;
@@ -135,7 +135,17 @@ void Character::roll()
 	rollTicksRemaining = DASH_DURATION; // will count down, preventing the movespeed cap from applying until roll is done.
 }
 
-void Character::fire(Position target)
+Projectile Character::fire(Position target)
 {
+	Projectile result;
 
+	//initialize new projectile
+	//Velocity newVelocity = { (target.x - x)/60.0f, (target.y - y)/60.0f }; // divides by 60 for frame rate, is currently broken
+	Velocity newVelocity = { 1, 1 };
+	result.setSDL_Rect(this->getSDL_Rect());
+	result.setVelocity(newVelocity);
+
+
+
+	return result;
 }
