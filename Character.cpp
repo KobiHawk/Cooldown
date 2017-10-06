@@ -137,14 +137,17 @@ void Character::roll()
 
 Projectile Character::fire(Position target)
 {
-	Projectile result;
 
 	//initialize new projectile
-	Velocity newVelocity = { (target.x - x)/60.0f, (target.y - y)/60.0f }; // divides by 60 for frame rate, is currently broken
-	result.setSDL_Rect(this->getSDL_Rect());
-	result.setVelocity(newVelocity);
+	SDL_Rect newRect = { this->x + (w/2), this->y + (h/2), 4, 4 };
+	Velocity newVelocity = { (target.x - x)/60.0f, (target.y - y)/60.0f }; // divides by 60 for frame rate
+
+	Projectile* result = new Projectile(newRect, newVelocity);
+
+	//result->setSDL_Rect(newRect);
+	//result->setVelocity(newVelocity);
 
 
 
-	return result;
+	return *result;
 }

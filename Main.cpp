@@ -22,7 +22,6 @@ SDL_Texture* projectileTexture;
 const int SCREEN_WIDTH = 1024;
 const int SCREEN_HEIGHT = 1024;
 const int FRAME_RATE = 60;
-int speed = 5;
 
 bool init()
 {

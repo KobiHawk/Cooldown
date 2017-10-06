@@ -5,6 +5,14 @@
 
 Projectile::Projectile()
 {
+
+}
+Projectile::Projectile(SDL_Rect newSDLRect, Velocity newVelocity)
+{
+	location = newSDLRect;
+	velocity = newVelocity;
+	velocity.velocityX *= SPEED;
+	velocity.velocityY *= SPEED;
 }
 
 
