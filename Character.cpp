@@ -4,10 +4,10 @@
 
 Character::Character()
 {
-	x = 0;
-	y = 0;
-	w = 0;
-	h = 0;
+	location.x = 0;
+	location.y = 0;
+	location.w = 0;
+	location.h = 0;
 	velocity = { 0.0f, 0.0f };
 }
 
@@ -16,10 +16,13 @@ Character::~Character()
 {
 }
 
-SDL_Rect Character::getSDL_Rect()
+Character::Character(int x, int y, int w, int h)
 {
-	SDL_Rect result = { x, y, w, h };
-	return result;
+	location.x = x;
+	location.y = y;
+	location.w = w;
+	location.h = h;
+	velocity = { 0.0f, 0.0f };
 }
 
 Velocity Character::getVelocity()
@@ -27,12 +30,18 @@ Velocity Character::getVelocity()
 	return velocity;
 }
 
+Position Character::getCenter()
+{
+	Position result = { location.x + (location.w / 2), location.y + (location.h / 2) };
+	return result;
+}
+
 void Character::setPosition(int x, int y, int w, int h)
 {
-	this->x = x;
-	this->y = y;
-	this->w = w;
-	this->h = h;
+	location.x = x;
+	location.y = y;
+	location.w = w;
+	location.h = h;
 }
 
 void Character::setVelocity(float velocityX, float velocityY)
@@ -124,8 +133,8 @@ void Character::move(int x, int y)
 	}
 
 	//move character based on velocity
-	this->x += velocity.velocityX;
-	this->y += velocity.velocityY;
+	location.x += velocity.velocityX;
+	location.y += velocity.velocityY;
 }
 
 void Character::roll()
@@ -137,17 +146,11 @@ void Character::roll()
 
 Projectile Character::fire(Position target)
 {
-
 	//initialize new projectile
-	SDL_Rect newRect = { this->x + (w/2), this->y + (h/2), 4, 4 };
-	Velocity newVelocity = { (target.x - x)/60.0f, (target.y - y)/60.0f }; // divides by 60 for frame rate
+	Position newPosition = { getCenter().x, getCenter().y};
+	Velocity newVelocity = { (target.x - location.x)/60.0f, (target.y - location.y)/60.0f }; // divides by 60 for frame rate
 
-	Projectile* result = new Projectile(newRect, newVelocity);
-
-	//result->setSDL_Rect(newRect);
-	//result->setVelocity(newVelocity);
-
-
+	Projectile *result = new Projectile(newPosition, newVelocity);
 
 	return *result;
 }

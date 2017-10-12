@@ -8,8 +8,10 @@ class Character
 public:
 	Character();
 	~Character();
-	SDL_Rect getSDL_Rect();
+	Character::Character(int x, int y, int w, int h);
+	SDL_Rect getSDL_Rect() { return location; }
 	Velocity getVelocity();
+	Position getCenter();
 	void setPosition(int x, int y, int w, int h);
 	void setVelocity(float velocityX, float velocityY);
 
@@ -18,18 +20,12 @@ public:
 	Projectile fire(Position target);
 
 private:
-
-
-
 	const float MAX_VELOCITY = 5;
 	const float SPEED = 0.5f;
 	const int DASH_DURATION = 20;
 
 	//position
-	int x;
-	int y;
-	int w;
-	int h;
+	SDL_Rect location;
 
 	//velocity
 	Velocity velocity;

@@ -5,7 +5,7 @@ class Projectile
 {
 public:
 	Projectile();
-	Projectile::Projectile(SDL_Rect newSDLRect, Velocity newVelocity);
+	Projectile::Projectile(Position newPosition, Velocity newVelocity);
 	~Projectile();
 
 	SDL_Rect getSDL_Rect();
@@ -16,7 +16,7 @@ public:
 	void move();
 
 private:
-	const float SPEED = 5.25f;
+	const float SPEED = 3.5f;
 
 	Velocity velocity;
 	SDL_Rect location;

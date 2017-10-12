@@ -7,9 +7,13 @@ Projectile::Projectile()
 {
 
 }
-Projectile::Projectile(SDL_Rect newSDLRect, Velocity newVelocity)
+Projectile::Projectile(Position newPosition, Velocity newVelocity)
 {
-	location = newSDLRect;
+	location.x = newPosition.x;
+	location.y = newPosition.y;
+	location.w = SPRITE_SIZE;
+	location.h = SPRITE_SIZE;
+
 	velocity = newVelocity;
 	velocity.velocityX *= SPEED;
 	velocity.velocityY *= SPEED;
