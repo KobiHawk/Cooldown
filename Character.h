@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include "Structs.h"
 #include "Projectile.h"
+#include "Hitbox.h"
 
 class Character
 {

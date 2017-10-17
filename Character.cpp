@@ -148,7 +148,7 @@ Projectile Character::fire(Position target)
 {
 	//initialize new projectile
 	Position newPosition = { getCenter().x, getCenter().y};
-	Velocity newVelocity = { (target.x - location.x)/60.0f, (target.y - location.y)/60.0f }; // divides by 60 for frame rate
+	Velocity newVelocity = { (target.x - getCenter().x)/60.0f, (target.y - getCenter().y)/60.0f }; // divides by 60 for frame rate, should try to get it directly
 
 	Projectile *result = new Projectile(newPosition, newVelocity);
 

@@ -4,21 +4,6 @@
 #include "Projectile.h"
 #include <vector>
 
-struct Node
-{
-	Projectile projectile;
-	Node* next;
-};
-
-class LinkedList
-{
-public:
-
-private:
-	Node head;
-	int totalProjectiles;
-};
-
 
 class ProjectileManager
 {

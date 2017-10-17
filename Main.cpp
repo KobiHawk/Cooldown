@@ -4,8 +4,10 @@
 #include <string>
 #include <math.h>
 #include "Character.h"
+#include "Enemy.h"
 #include "Mouse.h"
 #include "ProjectileManager.h"
+#include "EnemyManager.h"
 
 bool init();
 SDL_Texture* loadTexture(std::string path);
@@ -13,11 +15,14 @@ bool loadMedia();
 void close();
 
 Character player;
+Enemy enemy;
 ProjectileManager projectileManager;
+EnemyManager enemyManager;
 SDL_Window* window;
 SDL_Surface* screenSurface;
 SDL_Renderer* renderer;
 SDL_Texture* playerTexture;
+SDL_Texture* enemyTexture;
 SDL_Texture* projectileTexture;
 const int SCREEN_WIDTH = 1024;
 const int SCREEN_HEIGHT = 1024;
@@ -119,6 +124,12 @@ bool loadMedia()
 	{
 		result = false;
 	}
+	enemyTexture = loadTexture("Assets/Images/RedCircle.png");
+	if (enemyTexture == NULL)
+	{
+		result = false;
+	}
+	SDL_SetTextureColorMod(enemyTexture, 0, 255, 0);
 	projectileTexture = loadTexture("Assets/Images/Bullet.png");
 	if (projectileTexture == NULL)
 	{
@@ -148,11 +159,12 @@ int main(int argc, char* argv[])
 
 			//SDL_Rect drawDestination = { (SCREEN_WIDTH / 2) - 64, (SCREEN_HEIGHT / 2) - 64, 64, 64 }; // character size here
 			player.setPosition((SCREEN_WIDTH / 2) - 64, (SCREEN_HEIGHT / 2) - 64, 64, 64);
+			enemy.setPosition(player.getSDL_Rect().x, player.getSDL_Rect().y - 128, 64, 64);
+			enemyManager.add(enemy);
 
 			SDL_Event e;
 			Mouse mouse;
 			Position mousePosition;
-			//ProjectileManager projectileManager;
 
 			while (!quit) // main game loop
 			{
@@ -209,16 +221,26 @@ int main(int argc, char* argv[])
 				player.move(moveX, moveY);
 				//end player movement
 				
+				for (int i = 0; i < projectileManager.getCurrProjectiles(); i++)
+				{
+					//move all projectiles
+					projectileManager.returnProjectileAt(i).move();
+					if (enemyManager.checkCollision(projectileManager.returnProjectileAt(i).getSDL_Rect(), 
+													 enemyManager.returnEnemyAt(0).getSDL_Rect()))
+					{
+						printf("Collision!");
+					}
+				}
+
 				//end movement
 
 				SDL_RenderClear(renderer);
 				SDL_RenderCopy(renderer, playerTexture, NULL, &player.getSDL_Rect());
+				SDL_RenderCopy(renderer, enemyTexture, NULL, &enemy.getSDL_Rect());
 
 				//manage projectiles
 				for (int i = 0; i < projectileManager.getCurrProjectiles(); i++)
 				{
-					//move all projectiles, then render them
-					projectileManager.returnProjectileAt(i).move();
 					SDL_RenderCopy(renderer, projectileTexture, NULL, &projectileManager.returnProjectileAt(i).getSDL_Rect());
 				}
 				SDL_RenderPresent(renderer); // blit
