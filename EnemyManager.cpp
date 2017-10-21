@@ -10,37 +10,87 @@ EnemyManager::~EnemyManager()
 {
 }
 
-bool EnemyManager::add(Enemy newEnemy)
+bool EnemyManager::add(Enemy& newEnemy)
 {
-	if (currEnemies >= MAX_ENEMIES)
+	if (enemies.size() >= MAX_ENEMIES)
 	{
 		return false;
 	}
 	else
 	{
-		enemies.push_back(newEnemy);
-		currEnemies++;
+		newEnemy.setKey(currKey); // the enemy needs to know what his key is so we can look him up when he dies
+		enemies[currKey] = newEnemy; // used to prevent overwriting enemies when a previous enemy in the list dies
+		currKey++;
 		return true;
 	}
 }
 
-/*
-bool EnemyManager::remove(Enemy target)
+bool EnemyManager::erase(int key)
 {
-	Enemies.
-}
-*/
+	bool result = true;
 
-Enemy& EnemyManager::returnEnemyAt(int index)
+	if (key > enemies.size())
+	{
+		result = false;
+	}
+	else
+	{
+		enemies.erase(key);
+	}
+
+	/*
+	std::vector<Enemy>::iterator iterator;
+	iterator = find(enemies.begin(), enemies.end(), target);
+	if (iterator != enemies.end())
+	{
+		enemies.erase(iterator);
+		currEnemies--;
+	}
+	else
+	{
+		result = false;
+	}
+	*/
+
+	return result;
+}
+/*
+returnEnemyAt(int index)
+
+Returns the enemy based on its key.
+*/
+Enemy EnemyManager::returnEnemyAt(int index)
 {
 	Enemy result;
-	if (index >= currEnemies)
+
+	std::map<int, Enemy>::iterator iterator;
+
+	iterator = enemies.find(index);
+	if (iterator != enemies.end())
+	{
+		//found it 
+		result = iterator->second; //returns the second value of the pair, the enemy that we found (first is an int, the key)
+	}
+
+	return result;
+}
+
+/*
+returnEnemyIndex(int index)
+
+Returns the enemy based on its index in the map.
+*/
+Enemy& EnemyManager::returnEnemyIndex(int index)
+{
+	Enemy result;
+
+	if (index > enemies.size())
 	{
 		return result;
 	}
 	else
 	{
-		return enemies.at(index);
+		return enemies[index];
 	}
 }
 

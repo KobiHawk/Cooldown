@@ -162,6 +162,13 @@ int main(int argc, char* argv[])
 			enemy.setPosition(player.getSDL_Rect().x, player.getSDL_Rect().y - 128, 64, 64);
 			enemyManager.add(enemy);
 
+			//Populating screen for testing
+			Enemy enemy2, enemy3;
+			enemy2.setPosition(enemy.getSDL_Rect().x + 128, enemy.getSDL_Rect().y, 64, 64);
+			enemy3.setPosition(enemy.getSDL_Rect().x - 128, enemy.getSDL_Rect().y, 64, 64);
+			enemyManager.add(enemy2);
+			enemyManager.add(enemy3);
+
 			SDL_Event e;
 			Mouse mouse;
 			Position mousePosition;
@@ -220,32 +227,45 @@ int main(int argc, char* argv[])
 				}
 				player.move(moveX, moveY);
 				//end player movement
-				
+			
 				for (int i = 0; i < projectileManager.getCurrProjectiles(); i++)
 				{
 					//move all projectiles
 					projectileManager.returnProjectileAt(i).move();
-					if (enemyManager.checkCollision(projectileManager.returnProjectileAt(i).getSDL_Rect(), 
-													 enemyManager.returnEnemyAt(0).getSDL_Rect()))
+
+					//for each projectile, check collisions with all enemies each frame
+					for (int j = 0; j < enemyManager.getCurrEnemies(); j++)
 					{
-						printf("Collision!");
+						if (enemyManager.checkCollision(projectileManager.returnProjectileAt(i).getSDL_Rect(), //get location of projectile
+														enemyManager.returnEnemyAt(j).getSDL_Rect())) //get location of enemy, check collision
+						{
+							enemyManager.erase(enemyManager.returnEnemyAt(j).getKey()); //destroy enemy, search by key in map
+						}
 					}
 				}
 
 				//end movement
 
+				//clear renderer for new frame
 				SDL_RenderClear(renderer);
-				SDL_RenderCopy(renderer, playerTexture, NULL, &player.getSDL_Rect());
-				SDL_RenderCopy(renderer, enemyTexture, NULL, &enemy.getSDL_Rect());
 
-				//manage projectiles
+				//render player
+				SDL_RenderCopy(renderer, playerTexture, NULL, &player.getSDL_Rect());
+
+				//render enemies
+				for (int i = 0; i < enemyManager.getCurrEnemies(); i++)
+				{
+					SDL_RenderCopy(renderer, enemyTexture, NULL, &enemyManager.returnEnemyIndex(i).getSDL_Rect());
+				}
+
+				//render projectiles
 				for (int i = 0; i < projectileManager.getCurrProjectiles(); i++)
 				{
 					SDL_RenderCopy(renderer, projectileTexture, NULL, &projectileManager.returnProjectileAt(i).getSDL_Rect());
 				}
 				SDL_RenderPresent(renderer); // blit
 
-			} // end of game loop, should be nothing after
+			} // end of game loop
 		} 
 	}
 	close();

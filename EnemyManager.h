@@ -3,6 +3,7 @@
 #include <SDL.h>
 #include "Enemy.h"
 #include <vector>
+#include <map>
 
 /*
 Identical to ProjectileManager, but for things with Enemies that Projectiles can collide with.
@@ -16,17 +17,20 @@ public:
 	EnemyManager();
 	~EnemyManager();
 
-	int getCurrEnemy() { return currEnemies; }
-	bool add(Enemy newEnemy);
-	//bool remove(Enemy target);
-	Enemy& returnEnemyAt(int index);
+	int getCurrEnemies() { return enemies.size(); }
+	bool add(Enemy& newEnemy);
+	bool erase(int key);
+	Enemy returnEnemyAt(int index);
+	Enemy& returnEnemyIndex(int index);
 	bool EnemyManager::checkCollision(SDL_Rect a, SDL_Rect b);
 
 private:
 	const static int MAX_ENEMIES = 200;
-	int currEnemies = 0;
+	//int currEnemies = 0;
+	int currKey = 0;
 
-	std::vector<Enemy> enemies;
+	//std::vector<Enemy> enemies;
+	std::map<int, Enemy> enemies;
 
 	//SDL_Texture* projectileTexture;
 };

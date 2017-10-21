@@ -20,7 +20,7 @@ public:
 	void roll();
 	Projectile fire(Position target);
 
-private:
+protected:
 	const float MAX_VELOCITY = 5;
 	const float SPEED = 0.5f;
 	const int DASH_DURATION = 20;

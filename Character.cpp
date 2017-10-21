@@ -133,8 +133,8 @@ void Character::move(int x, int y)
 	}
 
 	//move character based on velocity
-	location.x += velocity.velocityX;
-	location.y += velocity.velocityY;
+	location.x += (int) velocity.velocityX;
+	location.y += (int) velocity.velocityY;
 }
 
 void Character::roll()
